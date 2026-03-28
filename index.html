@@ -556,7 +556,7 @@ window.onload=function(){
   var tok=localStorage.getItem('ybp_mon_token');
   if(tok){document.getElementById('mon-token').value=tok;}
   var ws=localStorage.getItem('ybp_mon_ws');
-  if(ws){document.getElementById('mon-ws').value=ws;}
+  if(ws){var wsEl=document.getElementById('mon-ws');if(wsEl)wsEl.value=ws;}
   var gid=localStorage.getItem('ybp_g_client');
   if(gid){document.getElementById('g-client-id').value=gid;}
   var whi=localStorage.getItem('ybp_wh_infra');if(whi)document.getElementById('wh-infra').value=whi;
