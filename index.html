@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
-<head>
-<meta charset="UTF-8">
+<!-- saved from url=(0044)file:///C:/Users/User/Downloads/ybp_app.html -->
+<html lang="he" dir="rtl"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#16233a">
 <meta name="mobile-web-app-capable" content="yes">
@@ -42,7 +42,7 @@ self.addEventListener('fetch', e => {
   navigator.serviceWorker.register(swUrl).catch(function(){});
 }
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="./YBP Field Reports_files/xlsx.full.min.js.download"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f0f4f8;color:#1a2e4a;direction:rtl;min-height:100vh}
@@ -313,7 +313,7 @@ if(!navigator.onLine) document.getElementById('offline-bar').style.display='bloc
       </div>
       <div class="row2">
         <div class="field"><label>פרויקט *</label><select class="fi" id="r-proj"><option value="">בחר פרויקט...</option></select></div>
-        <div class="field"><label>מנהל פרויקט</label><input class="fi" id="r-pm" readonly></div>
+        <div class="field"><label>מנהל פרויקט</label><input class="fi" id="r-pm" readonly=""></div>
         <div class="field"><label>תאריך</label><input class="fi" type="date" id="r-date"></div>
         <div class="field"><label>התקדמות: <b id="r-pval" style="color:#f59e0b">65%</b></label><input type="range" min="0" max="100" step="5" value="65" id="r-prog" style="width:100%;accent-color:#f59e0b"></div>
       </div>
@@ -356,15 +356,17 @@ if(!navigator.onLine) document.getElementById('offline-bar').style.display='bloc
       <div class="ctitle">💬 פרטי הדיון</div>
       <div class="row2">
         <div class="field"><label>פרויקט *</label><select class="fi" id="d-proj"><option value="">בחר פרויקט...</option></select></div>
-        <div class="field"><label>מנהל פרויקט</label><input class="fi" id="d-pm" readonly></div>
+        <div class="field"><label>מנהל פרויקט</label><input class="fi" id="d-pm" readonly=""></div>
         <div class="field"><label>תאריך ושעה</label><input class="fi" type="datetime-local" id="d-dt"></div>
         <div class="field"><label>מיקום</label><input class="fi" id="d-loc" placeholder="אתר / משרד..."></div>
       </div>
     </div>
     <div class="card">
       <div class="field"><label>משתתפים</label><textarea class="fi fi-ta" id="d-part" rows="3" placeholder="נתן ורשבסקי..."></textarea></div>
-      <div class="field"><label>נושאי הדיון</label><textarea class="fi fi-ta" id="d-topics" rows="4" placeholder="1. לוח זמנים&#10;2. "></textarea></div>
-      <div class="field"><label>החלטות</label><textarea class="fi fi-ta" id="d-dec" rows="4" placeholder="• &#10;• "></textarea></div>
+      <div class="field"><label>נושאי הדיון</label><textarea class="fi fi-ta" id="d-topics" rows="4" placeholder="1. לוח זמנים
+2. "></textarea></div>
+      <div class="field"><label>החלטות</label><textarea class="fi fi-ta" id="d-dec" rows="4" placeholder="• 
+• "></textarea></div>
       <div class="field"><label>משימות לביצוע</label>
         <div id="task-list" style="margin-bottom:6px"></div>
         <button class="add-obs-btn" id="add-task-btn" style="margin-top:0">+ הוסף משימה</button>
@@ -387,9 +389,19 @@ if(!navigator.onLine) document.getElementById('offline-bar').style.display='bloc
 <script>
 // ===== AUTH =====
 var ALLOWED_EMAILS = [];
+// רשימת המורשים - צוות YBP Projects
+var DEFAULT_ALLOWED = [
+  "nathan@ybprojects.com",
+  "yuval@ybprojects.com",
+  "barak@ybprojects.com",
+  "tal@ybprojects.com",
+  "yaniv@ybprojects.com",
+  "matan@ybprojects.com",
+  "itamar@ybprojects.com"
+];
 function loadAllowedEmails(){
   try{ var s=localStorage.getItem("ybp_allowed_emails"); if(s) ALLOWED_EMAILS=JSON.parse(s)||[]; }catch(e){}
-  if(!ALLOWED_EMAILS.length) ALLOWED_EMAILS=["nathan@ybprojects.com","yuval@ybprojects.com","barak@ybprojects.com","tal@ybprojects.com","yaniv@ybprojects.com","matan@ybprojects.com","itamar@ybprojects.com"]
+  if(!ALLOWED_EMAILS.length) ALLOWED_EMAILS=DEFAULT_ALLOWED.slice();
 }
 function saveAllowedEmails(){ try{ localStorage.setItem("ybp_allowed_emails",JSON.stringify(ALLOWED_EMAILS)); }catch(e){} }
 
@@ -726,7 +738,7 @@ document.addEventListener("DOMContentLoaded", function() {
   try { var u = localStorage.getItem("ybp_users"); if(u) Object.assign(USERS, JSON.parse(u)); } catch(e){}
 
   // Wire buttons
-  document.getElementById("login-btn").addEventListener("click", function(){ doLogin(); });
+  document.getElementById("login-btn").addEventListener("click", doLogin);
   document.getElementById("lp").addEventListener("keydown", function(e){ if(e.key==="Enter") doLogin(); });
   document.getElementById("btn-settings").addEventListener("click", function(){ goPage("settings"); });
   document.getElementById("btn-logout").addEventListener("click", doLogout);
@@ -775,19 +787,26 @@ document.addEventListener("DOMContentLoaded", function() {
 
 // ===== AUTH =====
 window.doLogin = function() {
-  var e = (document.getElementById('lu')||{}).value||''; e=e.trim().toLowerCase();
+  var e = (document.getElementById('lu')||{}).value||'';
+  e = e.trim().toLowerCase();
   var p = (document.getElementById('lp')||{}).value||'';
-  var U={'nathan':'ybp2025','nathan@ybprojects.com':'ybp2025','yuval@ybprojects.com':'ybp2025','barak@ybprojects.com':'ybp2025','tal@ybprojects.com':'ybp2025','yaniv@ybprojects.com':'ybp2025','matan@ybprojects.com':'ybp2025','itamar@ybprojects.com':'ybp2025'};
-  var N={'nathan':'נתן ורשבסקי','yuval':'יובל','barak':'ברק','tal':'טל','yaniv':'יניב','matan':'מתן','itamar':'איתמר'};
-  if(U[e]&&U[e]===p){
-    var nm=N[e]||N[e.split('@')[0]]||e;
+  var U={'nathan':'ybp2025','nathan@ybprojects.com':'ybp2025','dana':'ybp2025','alon':'ybp2025','mira':'ybp2025','roi':'ybp2025','shira':'ybp2025','yossi':'ybp2025'};
+  var N={'nathan':'נתן ורשבסקי','nathan@ybprojects.com':'נתן ורשבסקי','dana':'דנה','alon':'אלון','mira':'מירה','roi':'רועי','shira':'שירה','yossi':'יוסי'};
+  // also check dynamic USERS from settings
+  var du = {};
+  try{ du = JSON.parse(localStorage.getItem('ybp_users')||'{}'); }catch(ex){}
+  if((U[e]&&U[e]===p)||(du[e]&&du[e]===p)){
+    var nm=N[e]||du[e+'_name']||e;
     try{localStorage.setItem('ybp_sess',JSON.stringify({id:e,name:nm,exp:Date.now()+28800000}));}catch(ex){}
     loginOK(e,nm,'');
   } else {
     var err=document.getElementById('lerr');
-    if(err){err.textContent='שם משתמש או סיסמא שגויים';err.style.display='block';}
+    if(err){err.textContent='שם משתמש או סיסמה שגויים';err.style.display='block';}
   }
+};
+ else { err.style.display="block"; document.getElementById("lp").value=""; }
 }
+
 function loginOK(uid, displayName, pic) {
   state.user = uid;
   state.name = displayName || uid.split("@")[0];
@@ -1171,5 +1190,6 @@ function testMon() {
 function saveWH() { ["infra","report","disc"].forEach(function(k){var e=document.getElementById("s-wh-"+k);if(e)localStorage.setItem("ybp_wh_"+k,e.value.trim());}); renderPills(); var r=document.getElementById("wh-res"); r.textContent="✓ נשמר!";r.className="tres tok";r.style.display="block";setTimeout(function(){r.style.display="none";},3000); }
 function saveGCID() { var v=document.getElementById("s-gcid").value.trim(); localStorage.setItem("ybp_cid",v); renderPills(); alert("✓ נשמר! רענן את הדף."); }
 </script>
-</body>
-</html>
+
+
+</body></html>
