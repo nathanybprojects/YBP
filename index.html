@@ -584,15 +584,19 @@ function googleLogin(){
 לעת עתה השתמש בכניסה רגילה.');return;}
   alert('Google OAuth דורש HTTPS. אחסן את האפליקציה ב-Firebase Hosting ואז זה יעבוד אוטומטית.');
 }
-function doLogin(){
-  var u=document.getElementById('lu').value.trim().toLowerCase();
-  var p=document.getElementById('lp').value;
-  var err=document.getElementById('lerr');
-  if(users[u]&&users[u].pass===p){
-    err.style.display='none';
-    if(document.getElementById('lr').checked)localStorage.setItem('ybp_user',JSON.stringify({id:u}));
-    currentUser=u;loginSuccess(u);
-  }else{err.style.display='block';document.getElementById('lp').value='';}
+function doLogin() {
+  var e = document.getElementById('lu') ? document.getElementById('lu').value.trim().toLowerCase() : '';
+  var p = document.getElementById('lp') ? document.getElementById('lp').value : '';
+  var USERS = {'nathan':'ybp2025','nathan@ybprojects.com':'ybp2025','dana':'ybp2025','alon':'ybp2025','mira':'ybp2025','roi':'ybp2025','shira':'ybp2025','yossi':'ybp2025'};
+  var NAMES = {'nathan':'נתן ורשבסקי','nathan@ybprojects.com':'נתן ורשבסקי','dana':'דנה','alon':'אלון','mira':'מירה','roi':'רועי','shira':'שירה','yossi':'יוסי'};
+  if(USERS[e] && USERS[e]===p){
+    var nm=NAMES[e]||e;
+    try{localStorage.setItem('ybp_sess',JSON.stringify({id:e,name:nm,exp:Date.now()+28800000}));}catch(ex){}
+    loginOK(e,nm,'');
+  } else {
+    var err=document.getElementById('lerr');
+    if(err){err.textContent='שם משתמש או סיסמה שגויים';err.style.display='block';}
+  }
 }
 function loginSuccess(uid){
   var name=users[uid]?users[uid].name:uid;
