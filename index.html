@@ -389,7 +389,7 @@ if(!navigator.onLine) document.getElementById('offline-bar').style.display='bloc
 var ALLOWED_EMAILS = [];
 function loadAllowedEmails(){
   try{ var s=localStorage.getItem("ybp_allowed_emails"); if(s) ALLOWED_EMAILS=JSON.parse(s)||[]; }catch(e){}
-  if(!ALLOWED_EMAILS.length) ALLOWED_EMAILS=["nathan@ybprojects.com"];
+  if(!ALLOWED_EMAILS.length) ALLOWED_EMAILS=["nathan@ybprojects.com","yuval@ybprojects.com","barak@ybprojects.com","tal@ybprojects.com","yaniv@ybprojects.com","matan@ybprojects.com","itamar@ybprojects.com"]
 }
 function saveAllowedEmails(){ try{ localStorage.setItem("ybp_allowed_emails",JSON.stringify(ALLOWED_EMAILS)); }catch(e){} }
 
