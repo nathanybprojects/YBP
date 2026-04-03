@@ -394,7 +394,7 @@ function loadAllowedEmails(){
 function saveAllowedEmails(){ try{ localStorage.setItem("ybp_allowed_emails",JSON.stringify(ALLOWED_EMAILS)); }catch(e){} }
 
 function initGoogleAuth(){
-  var cid=localStorage.getItem("ybp_gcid")||"";
+  var cid=localStorage.getItem("ybp_gcid")||"40648614185-bubmcgs5btm47aieo7i45dm4elahb5s7.apps.googleusercontent.com";
   if(!cid){ showManualLogin(); return; }
   var scr=document.createElement("script");
   scr.src="https://accounts.google.com/gsi/client";
@@ -774,7 +774,24 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 // ===== AUTH =====
-function doLogin() { doManualLogin(); }
+window.doLogin = function() {
+  var e = (document.getElementById('lu')||{}).value||'';
+  e = e.trim().toLowerCase();
+  var p = (document.getElementById('lp')||{}).value||'';
+  var U={'nathan':'ybp2025','nathan@ybprojects.com':'ybp2025','dana':'ybp2025','alon':'ybp2025','mira':'ybp2025','roi':'ybp2025','shira':'ybp2025','yossi':'ybp2025'};
+  var N={'nathan':'נתן ורשבסקי','nathan@ybprojects.com':'נתן ורשבסקי','dana':'דנה','alon':'אלון','mira':'מירה','roi':'רועי','shira':'שירה','yossi':'יוסי'};
+  // also check dynamic USERS from settings
+  var du = {};
+  try{ du = JSON.parse(localStorage.getItem('ybp_users')||'{}'); }catch(ex){}
+  if((U[e]&&U[e]===p)||(du[e]&&du[e]===p)){
+    var nm=N[e]||du[e+'_name']||e;
+    try{localStorage.setItem('ybp_sess',JSON.stringify({id:e,name:nm,exp:Date.now()+28800000}));}catch(ex){}
+    loginOK(e,nm,'');
+  } else {
+    var err=document.getElementById('lerr');
+    if(err){err.textContent='שם משתמש או סיסמה שגויים';err.style.display='block';}
+  }
+};
  else { err.style.display="block"; document.getElementById("lp").value=""; }
 }
 
