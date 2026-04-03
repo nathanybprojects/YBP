@@ -726,7 +726,7 @@ document.addEventListener("DOMContentLoaded", function() {
   try { var u = localStorage.getItem("ybp_users"); if(u) Object.assign(USERS, JSON.parse(u)); } catch(e){}
 
   // Wire buttons
-  document.getElementById("login-btn").addEventListener("click", doLogin);
+  document.getElementById("login-btn").addEventListener("click", function(){ doLogin(); });
   document.getElementById("lp").addEventListener("keydown", function(e){ if(e.key==="Enter") doLogin(); });
   document.getElementById("btn-settings").addEventListener("click", function(){ goPage("settings"); });
   document.getElementById("btn-logout").addEventListener("click", doLogout);
